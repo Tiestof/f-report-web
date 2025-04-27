@@ -13,6 +13,7 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     const cleanRut = rut.replace(/\D/g, '');
+    console.log('Intentando login con:', cleanRut, clave);
 
     if (!cleanRut || !clave) {
       setError('Todos los campos son obligatorios');
@@ -28,28 +29,36 @@ export default function Login() {
       });
 
       const data = await res.json();
+      console.log('Respuesta completa de la API:', data);
 
       if (data.usuario) {
         const { rut, nombre, descripcion_usuario } = data.usuario;
+
+        console.log('Login exitoso, perfil:', descripcion_usuario);
 
         localStorage.setItem('usuarioRut', rut);
         localStorage.setItem('usuarioNombre', nombre);
 
         if (descripcion_usuario === 'SUPERVISOR') {
+          console.log('Redirigiendo a /supervisor');
           navigate('/supervisor');
         } else if (descripcion_usuario === 'TÉCNICO') {
+          console.log('Redirigiendo a /tecnico');
           navigate('/tecnico');
         } else {
+          console.log('Perfil no reconocido:', descripcion_usuario);
           setError('Perfil no reconocido.');
           setRut('');
           setClave('');
         }
       } else {
+        console.log('Credenciales incorrectas');
         setError('Usuario o clave incorrectos');
         setRut('');
         setClave('');
       }
     } catch (err) {
+      console.error('Error al conectar con la API:', err);
       setError('Error al conectar con el servidor');
       setRut('');
       setClave('');
