@@ -12,16 +12,19 @@ export default function DashboardSupervisor() {
 
   useEffect(() => {
     fetch(`${config.apiUrl}/estadisticas/reportes-no-finalizados-hoy`)
-      .then(res => res.json())
-      .then(data => {
-        setReportesNoFinalizados(data.total || 0);
-      });
+    .then(res => res.json())
+    .then(data => {
+      const total = data[0]?.total || 0;
+      setReportesNoFinalizados(total);
+    });
 
     fetch(`${config.apiUrl}/estadisticas/servicios-del-mes`)
-      .then(res => res.json())
-      .then(data => {
-        setServiciosDelMes(data.total || 0);
-      });
+    .then(res => res.json())
+    .then(data => {
+      const total = data[0]?.total || 0;
+      setServiciosDelMes(total);
+    });
+  
 
     fetch(`${config.apiUrl}/estadisticas/servicios-por-estado`)
       .then(res => res.json())
