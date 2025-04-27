@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import Menu from '../components/Menu';
+import DashboardSupervisor from './DashboardSupervisor';
 
 export default function Supervisor() {
   const isAuthenticated = useAuth();
@@ -31,9 +33,12 @@ export default function Supervisor() {
   console.log('Datos usuario - Nombre:', nombre, '| Rut:', rut);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background-dark text-white">
-      <h1 className="text-4xl font-bold mb-6">Bienvenido Supervisor</h1>
-      <p className="text-lg">Usuario: {nombre}</p>
-    </div>
-  );
+        <div className="flex">
+          <Menu perfil="SUPERVISOR" />
+          <div className="flex-1 p-6 bg-gray-100">
+            <DashboardSupervisor />
+          </div>
+        </div>
+      );
+ 
 }

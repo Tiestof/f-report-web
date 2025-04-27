@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import Menu from '../components/Menu';
 
 export default function Tecnico() {
   const isAuthenticated = useAuth();
@@ -31,9 +32,12 @@ export default function Tecnico() {
   console.log('Datos usuario - Nombre:', nombre, '| Rut:', rut);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-background-dark text-white">
-      <h1 className="text-4xl font-bold mb-6">Bienvenido Técnico</h1>
-      <p className="text-lg">Usuario: {nombre}</p>
+    <div className="flex">
+      <Menu perfil="TÉCNICO" />
+      <div className="flex-1 p-6 bg-gray-100">
+        <h1 className="text-2xl font-bold">Dashboard Técnico</h1>
+        <p className="text-lg">Usuario: {nombre}</p>
+      </div>
     </div>
   );
 }
