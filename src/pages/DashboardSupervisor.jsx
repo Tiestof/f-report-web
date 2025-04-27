@@ -55,7 +55,9 @@ export default function DashboardSupervisor() {
   }, []);
 
   return (
+    
     <div className="p-6 bg-gray-100 min-h-screen">
+        <h1 className="text-3xl font-bold text-gray-700 mb-6">Dashboard</h1>
       {/* Números Representativos */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <div className="bg-white p-6 rounded shadow text-center">
