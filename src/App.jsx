@@ -1,6 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
-import Supervisor from './pages/Supervisor';
+import SupervisorLayout from './layouts/SupervisorLayout';
+import DashboardSupervisor from './pages/DashboardSupervisor';
+import GestionUsuarios from './pages/GestionUsuarios';
 import Tecnico from './pages/Tecnico';
 
 export default function App() {
@@ -8,8 +10,12 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/supervisor" element={<Supervisor />} />
         <Route path="/tecnico" element={<Tecnico />} />
+
+        <Route path="/supervisor" element={<SupervisorLayout />}>
+          <Route index element={<DashboardSupervisor />} />
+          <Route path="usuarios" element={<GestionUsuarios />} />
+        </Route>
       </Routes>
     </Router>
   );
