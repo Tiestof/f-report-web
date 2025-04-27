@@ -1,8 +1,7 @@
 const config = {
-    apiUrl: 'http://194.195.87.132:3000/api',
-    // Si quieres usar local en desarrollo:
-    // apiUrl: 'http://localhost:3000/api',
-  };
-  
-  export default config;
-  
+    apiUrl: 'https://194.195.87.132:3000/api',
+    //  usar local en desarrollo:
+    // apiUrl: 'https://localhost:3000/api',
+};
+
+export default config;

@@ -6,14 +6,17 @@ export default function Login() {
   const [rut, setRut] = useState('');
   const [clave, setClave] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     const cleanRut = rut.replace(/\D/g, '');
 
     if (!cleanRut || !clave) {
       setError('Todos los campos son obligatorios');
+      setIsLoading(false);
       return;
     }
 
@@ -25,16 +28,12 @@ export default function Login() {
       });
 
       const data = await res.json();
-      console.log('Respuesta de la API:', data);
 
       if (data.usuario) {
         const { rut, nombre, descripcion_usuario } = data.usuario;
 
-        // Guardamos datos en localStorage para usarlos en otras páginas
         localStorage.setItem('usuarioRut', rut);
         localStorage.setItem('usuarioNombre', nombre);
-
-        console.log('Perfil:', descripcion_usuario);
 
         if (descripcion_usuario === 'SUPERVISOR') {
           navigate('/supervisor');
@@ -42,13 +41,20 @@ export default function Login() {
           navigate('/tecnico');
         } else {
           setError('Perfil no reconocido.');
+          setRut('');
+          setClave('');
         }
       } else {
         setError('Usuario o clave incorrectos');
+        setRut('');
+        setClave('');
       }
     } catch (err) {
-      console.error('Error al conectar con la API:', err);
       setError('Error al conectar con el servidor');
+      setRut('');
+      setClave('');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -59,7 +65,7 @@ export default function Login() {
         <label className="block mb-1 text-gray-700 font-semibold">RUT</label>
         <input
           type="text"
-          placeholder="Ej: 123456789"
+          placeholder="Ej: 12345678-9"
           value={rut}
           onChange={(e) => setRut(e.target.value)}
           className="w-full mb-4 p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300"
@@ -73,8 +79,12 @@ export default function Login() {
           className="w-full mb-4 p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300"
         />
         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-        <button type="submit" className="w-full bg-button-orange hover:bg-orange-600 text-white p-2 rounded font-bold shadow">
-          LOG IN
+        <button
+          type="submit"
+          disabled={isLoading}
+          className={`w-full ${isLoading ? 'bg-gray-400' : 'bg-button-orange hover:bg-orange-600'} text-white p-2 rounded font-bold shadow transition duration-300 ease-in-out transform hover:scale-105`}
+        >
+          {isLoading ? 'Cargando...' : 'LOG IN'}
         </button>
       </form>
     </div>
