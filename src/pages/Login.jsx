@@ -74,7 +74,7 @@ export default function Login() {
         <label className="block mb-1 text-gray-700 font-semibold">RUT</label>
         <input
           type="text"
-          placeholder="Ej: 12345678-9"
+          placeholder="Ej: 123456789"
           value={rut}
           onChange={(e) => setRut(e.target.value)}
           className="w-full mb-4 p-2 border border-gray-300 rounded focus:outline-none focus:ring focus:border-blue-300"
