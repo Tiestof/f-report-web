@@ -4,6 +4,7 @@ import SupervisorLayout from './layouts/SupervisorLayout';
 import DashboardSupervisor from './pages/DashboardSupervisor';
 import GestionUsuarios from './pages/GestionUsuarios';
 import Tecnico from './pages/Tecnico';
+import CrearTarea from './pages/CrearTarea';
 
 export default function App() {
   return (
@@ -16,6 +17,13 @@ export default function App() {
           <Route index element={<DashboardSupervisor />} />
           <Route path="usuarios" element={<GestionUsuarios />} />
         </Route>
+
+        <Route path="/supervisor" element={<SupervisorLayout />}>
+          <Route index element={<DashboardSupervisor />} />
+          <Route path="usuarios" element={<GestionUsuarios />} />
+          <Route path="crear-tarea" element={<CrearTarea />} />
+        </Route>
+        
       </Routes>
     </Router>
   );

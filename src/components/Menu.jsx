@@ -12,7 +12,7 @@ export default function Menu({ perfil }) {
   };
 
   const botonesSupervisor = [
-    { label: 'CREAR TAREA', ruta: '/crear-tarea' },
+    { label: 'CREAR TAREA', ruta: '/supervisor/crear-tarea' },
     { label: 'VER TAREAS / REPORTES', ruta: '/reportes' },
     { label: 'GESTION USUARIOS', ruta: '/supervisor/usuarios' },
     { label: 'CREACION DE INFORMES', ruta: '/informes' },
