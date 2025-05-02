@@ -4,6 +4,8 @@ import config from '../config';
 export default function VerTareasReportes() {
   const [tareasHoy, setTareasHoy] = useState([]);
   const [reportes, setReportes] = useState([]);
+  const [tecnicos, setTecnicos] = useState([]);
+  const [estados, setEstados] = useState([]);
   const [filtro, setFiltro] = useState({ desde: '', hasta: '' });
 
   const obtenerTareasHoy = () => {
@@ -57,6 +59,13 @@ export default function VerTareasReportes() {
   };
 
   useEffect(() => {
+    fetch(`${config.apiUrl}/usuarios`)
+      .then(res => res.json())
+      .then(data => setTecnicos(data.filter(u => u.id_tipo_usuario === 1)));
+
+    fetch(`${config.apiUrl}/estados-servicio`)
+      .then(res => res.json())
+      .then(setEstados);
     obtenerTareasHoy();
 
     const hoy = new Date();
@@ -76,7 +85,7 @@ export default function VerTareasReportes() {
   const colores = {
     1: 'bg-yellow-200',
     2: 'bg-green-200',
-    3: 'bg-amber-200'
+    3: 'bg-amber-400'
   };
 
   return (
@@ -85,7 +94,7 @@ export default function VerTareasReportes() {
       <div className="grid gap-2">
         {tareasHoy.map((t, i) => (
           <div key={i} className="border p-3 rounded shadow bg-white">
-            <p><strong>Técnico:</strong> {t.rut_usuario}</p>
+            <p><strong>Técnico:</strong> {tecnicos.find(tec => tec.rut === t.rut_usuario)?.nombre || t.rut_usuario}</p>
             <p><strong>Dirección:</strong> {t.direccion}</p>
             <p><strong>Hora:</strong> {t.hora_inicio} - {t.hora_fin}</p>
           </div>
@@ -93,6 +102,11 @@ export default function VerTareasReportes() {
       </div>
 
       <h2 className="text-2xl font-bold my-6">Reportes Semana (o rango)</h2>
+      <div className="mb-4">
+        <p className="text-sm"><span className="inline-block w-4 h-4 bg-yellow-200 mr-2 rounded"></span> PENDIENTE</p>
+        <p className="text-sm"><span className="inline-block w-4 h-4 bg-green-200 mr-2 rounded"></span> FINALIZADO</p>
+        <p className="text-sm"><span className="inline-block w-4 h-4 bg-amber-400 mr-2 rounded"></span> CANCELADO</p>
+      </div>
       <div className="flex gap-2 mb-4">
         <input type="date" value={filtro.desde} onChange={(e) => setFiltro({ ...filtro, desde: e.target.value })} className="border p-2 rounded" />
         <input type="date" value={filtro.hasta} onChange={(e) => setFiltro({ ...filtro, hasta: e.target.value })} className="border p-2 rounded" />
@@ -102,9 +116,10 @@ export default function VerTareasReportes() {
       <div className="grid gap-2">
         {reportes.map((r, i) => (
           <div key={i} className={`border p-3 rounded shadow ${colores[r.id_estado_servicio] || 'bg-gray-100'}`}>
-            <p><strong>Técnico:</strong> {r.rut_usuario}</p>
+            <p><strong>Técnico:</strong> {tecnicos.find(tec => tec.rut === r.rut_usuario)?.nombre || r.rut_usuario}</p>
             <p><strong>Dirección:</strong> {r.direccion}</p>
             <p><strong>Fecha:</strong> {r.fecha_reporte} {r.hora_inicio} - {r.hora_fin}</p>
+            <p><strong>Estado:</strong> {estados.find(e => e.id_estado_servicio === r.id_estado_servicio)?.descripcion || r.id_estado_servicio}</p>
             <p><strong>Comentario:</strong> {r.comentario}</p>
           </div>
         ))}
