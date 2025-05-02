@@ -1,0 +1,114 @@
+import React, { useState, useEffect } from 'react';
+import config from '../config';
+
+export default function VerTareasReportes() {
+  const [tareasHoy, setTareasHoy] = useState([]);
+  const [reportes, setReportes] = useState([]);
+  const [filtro, setFiltro] = useState({ desde: '', hasta: '' });
+
+  const obtenerTareasHoy = () => {
+    fetch(`${config.apiUrl}/reportes`)
+      .then(res => res.json())
+      .then(data => {
+        const hoyStr = new Date().toLocaleDateString('sv-SE');
+        const horaActual = new Date().getHours() * 60 + new Date().getMinutes();
+
+        const asignadas = data.filter(r => {
+          const fechaLocal = new Date(r.fecha_reporte).toLocaleDateString('sv-SE');
+          return fechaLocal === hoyStr && r.id_estado_servicio === 4;
+        });
+
+        const porTecnico = {};
+        asignadas.forEach(r => {
+          if (!porTecnico[r.rut_usuario]) porTecnico[r.rut_usuario] = [];
+          porTecnico[r.rut_usuario].push(r);
+        });
+
+        const ordenadas = Object.values(porTecnico).flatMap(grupo => {
+          return grupo.sort((a, b) => {
+            const aMin = parseInt(a.hora_inicio.slice(0, 2)) * 60 + parseInt(a.hora_inicio.slice(3, 5));
+            const bMin = parseInt(b.hora_inicio.slice(0, 2)) * 60 + parseInt(b.hora_inicio.slice(3, 5));
+            return Math.abs(aMin - horaActual) - Math.abs(bMin - horaActual);
+          });
+        });
+
+        setTareasHoy(ordenadas);
+      });
+  };
+
+  const obtenerReportes = () => {
+    fetch(`${config.apiUrl}/reportes`)
+      .then(res => res.json())
+      .then(data => {
+        const desde = new Date(filtro.desde);
+        const hasta = new Date(filtro.hasta);
+
+        const filtrados = data.filter(r => {
+          const fecha = new Date(r.fecha_reporte);
+          return (
+            fecha >= desde &&
+            fecha <= hasta &&
+            r.id_estado_servicio !== 4
+          );
+        });
+
+        setReportes(filtrados);
+      });
+  };
+
+  useEffect(() => {
+    obtenerTareasHoy();
+
+    const hoy = new Date();
+    const primerDia = new Date(hoy);
+    primerDia.setDate(hoy.getDate() - hoy.getDay()); // Lunes
+    const ultimoDia = new Date(primerDia);
+    ultimoDia.setDate(primerDia.getDate() + 4); // Viernes
+
+    const desde = primerDia.toISOString().split('T')[0];
+    const hasta = ultimoDia.toISOString().split('T')[0];
+
+    setFiltro({ desde, hasta });
+
+    setTimeout(() => obtenerReportes(), 300);
+  }, []);
+
+  const colores = {
+    1: 'bg-yellow-200',
+    2: 'bg-green-200',
+    3: 'bg-amber-200'
+  };
+
+  return (
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4">Tareas Asignadas Hoy</h2>
+      <div className="grid gap-2">
+        {tareasHoy.map((t, i) => (
+          <div key={i} className="border p-3 rounded shadow bg-white">
+            <p><strong>Técnico:</strong> {t.rut_usuario}</p>
+            <p><strong>Dirección:</strong> {t.direccion}</p>
+            <p><strong>Hora:</strong> {t.hora_inicio} - {t.hora_fin}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="text-2xl font-bold my-6">Reportes Semana (o rango)</h2>
+      <div className="flex gap-2 mb-4">
+        <input type="date" value={filtro.desde} onChange={(e) => setFiltro({ ...filtro, desde: e.target.value })} className="border p-2 rounded" />
+        <input type="date" value={filtro.hasta} onChange={(e) => setFiltro({ ...filtro, hasta: e.target.value })} className="border p-2 rounded" />
+        <button onClick={obtenerReportes} className="bg-blue-600 text-white px-4 py-2 rounded">Filtrar</button>
+      </div>
+
+      <div className="grid gap-2">
+        {reportes.map((r, i) => (
+          <div key={i} className={`border p-3 rounded shadow ${colores[r.id_estado_servicio] || 'bg-gray-100'}`}>
+            <p><strong>Técnico:</strong> {r.rut_usuario}</p>
+            <p><strong>Dirección:</strong> {r.direccion}</p>
+            <p><strong>Fecha:</strong> {r.fecha_reporte} {r.hora_inicio} - {r.hora_fin}</p>
+            <p><strong>Comentario:</strong> {r.comentario}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}

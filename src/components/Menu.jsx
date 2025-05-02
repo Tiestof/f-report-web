@@ -13,9 +13,9 @@ export default function Menu({ perfil }) {
 
   const botonesSupervisor = [
     { label: 'CREAR TAREA', ruta: '/supervisor/crear-tarea' },
-    { label: 'VER TAREAS / REPORTES', ruta: '/reportes' },
+    { label: 'VER TAREAS / REPORTES', ruta: '/supervisor/ver-tareas-reportes' },
     { label: 'GESTION USUARIOS', ruta: '/supervisor/usuarios' },
-    { label: 'CREACION DE INFORMES', ruta: '/informes' },
+    { label: 'CREACION DE INFORMES', ruta: '/supervisor/informes' },
     { label: 'DASHBOARD', ruta: '/supervisor' },
   ];
 
