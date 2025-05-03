@@ -40,6 +40,7 @@ export default function GestionUsuarios() {
       .then(data => setTiposUsuario(data));
   };
 
+  // validacion de rut tomando como ultimo nuemro el DV.
   const validarRutCompleto = (rut) => {
     let suma = 0, multiplo = 2;
     for (let i = rut.length - 1; i >= 0; i--) {
@@ -47,7 +48,7 @@ export default function GestionUsuarios() {
       multiplo = multiplo === 7 ? 2 : multiplo + 1;
     }
     const dvEsperado = 11 - (suma % 11);
-    return dvEsperado !== 10; // solo numéricos
+    return dvEsperado !== 10; // solo numérico, sin guion
   };
 
   const handleInputChange = (e) => {
@@ -165,7 +166,7 @@ export default function GestionUsuarios() {
         setEditandoTabla(false);
         setIdEditar(null);
         setMensajeTabla(editandoTabla ? 'Elemento actualizado correctamente' : 'Elemento creado correctamente');
-        setTimeout(() => setMensajeTabla(''), 3000); // Limpia el mensaje después de 3 seg
+        setTimeout(() => setMensajeTabla(''), 3000); // Limpiamos el mensaje después de 3 seg
       });
   };
 
@@ -173,7 +174,7 @@ export default function GestionUsuarios() {
     <div className="p-6 bg-gray-100 min-h-screen">
       <h1 className="text-3xl font-bold text-gray-700 mb-6">Gestión de Usuarios</h1>
 
-      {/* Lista de Usuarios */}
+      {/* Listamos los Usuarios */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold mb-4">Lista de Usuarios</h2>
         <table className="min-w-full bg-white">

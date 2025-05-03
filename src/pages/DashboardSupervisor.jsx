@@ -58,23 +58,23 @@ export default function DashboardSupervisor() {
     
     <div className="p-6 bg-gray-100 min-h-screen">
         <h1 className="text-3xl font-bold text-gray-700 mb-6">Dashboard</h1>
-      {/* Números Representativos */}
+        <p className="text-lg text-gray-600 mb-6">Bienvenido, {localStorage.getItem('usuarioNombre')}</p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
         <div className="bg-white p-6 rounded shadow text-center">
-          <h2 className="text-xl font-bold text-gray-700 mb-2">Reportes No Finalizados Hoy</h2>
+          <h2 className="text-xl font-bold text-gray-700 mb-2">Reportes no finalizados hoy</h2>
           <p className="text-4xl font-bold text-red-600">{reportesNoFinalizados}</p>
         </div>
         <div className="bg-white p-6 rounded shadow text-center">
-          <h2 className="text-xl font-bold text-gray-700 mb-2">Servicios del Mes</h2>
+          <h2 className="text-xl font-bold text-gray-700 mb-2">Servicios del mes</h2>
           <p className="text-4xl font-bold text-green-600">{serviciosDelMes}</p>
         </div>
       </div>
 
-      {/* Gráficos de Barra */}
+      {/* Gráficos de Barra por tipo cada estado*/}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Servicios por Estado */}
+        {/* Servicios por Estado reporte*/}
         <div className="bg-white p-4 rounded shadow">
-          <h3 className="text-lg font-bold text-gray-700 mb-4 text-center">Servicios por Estado</h3>
+          <h3 className="text-lg font-bold text-gray-700 mb-4 text-center">Servicios por estado reporte</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={serviciosPorEstado}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -86,9 +86,9 @@ export default function DashboardSupervisor() {
           </ResponsiveContainer>
         </div>
 
-{/* Carga de Técnicos */}
+{/* Carga de trabajo por técnico, para con la carga de trabajo de los tecnicos */}
         <div className="bg-white p-4 rounded shadow">
-        <h3 className="text-lg font-bold text-gray-700 mb-4 text-center">Carga de Técnicos</h3>
+        <h3 className="text-lg font-bold text-gray-700 mb-4 text-center">Carga de trabajo por técnico</h3>
         <ResponsiveContainer width="100%" height={300}>
             <BarChart data={cargaTecnicos}>
             <CartesianGrid strokeDasharray="3 3" />

@@ -20,7 +20,7 @@ export default function Informes() {
       .then(setEstados);
   }, []);
 
-  // Sección A
+  // Reportes por Técnico
   const [filtroA, setFiltroA] = useState({ tecnico: '', desde: '', hasta: '' });
   const [reportesA, setReportesA] = useState([]);
 
@@ -47,7 +47,7 @@ export default function Informes() {
     descargarArchivo(encabezado + filas, 'Informe_Tecnico.csv', 'text/csv');
   };
 
-  // Sección B
+  // Reporte por Estado
   const [filtroB, setFiltroB] = useState({ estado: '', desde: '', hasta: '' });
   const [reportesB, setReportesB] = useState([]);
 
@@ -65,7 +65,7 @@ export default function Informes() {
       });
   };
 
-  // Sección C
+  // Carga por tecnico
   const [filtroC, setFiltroC] = useState({ desde: '', hasta: '' });
   const [datosC, setDatosC] = useState([]);
 
@@ -110,7 +110,7 @@ export default function Informes() {
       });
   };
 
-  // Sección D
+  // Totales por tipo de servicio
   const [filtroD, setFiltroD] = useState({ desde: '', hasta: '' });
   const [datosD, setDatosD] = useState([]);
 
@@ -178,11 +178,11 @@ const limpiarD = () => { setFiltroD({ desde: '', hasta: '' }); setDatosD([]); };
 
   return (
     <div className="p-6 bg-white">
-      <h1 className="text-2xl font-bold mb-4">Informes (A, B, C, D)</h1>
-      {/* Aquí iría el contenido visual renderizado para cada sección con sus formularios y tablas */}
+      <h1 className="text-2xl font-bold mb-4">Informes</h1>
+      
     
-{/* Sección A */}
-<h2 className="text-xl font-bold my-4">A. Reportes por Técnico</h2>
+{/* Reportes por Técnico */}
+<h2 className="text-xl font-bold my-4">Reporte por Técnico</h2>
 <div className="flex flex-wrap gap-2 mb-2">
   <select value={filtroA.tecnico} onChange={e => setFiltroA({ ...filtroA, tecnico: e.target.value })} className="border p-2 rounded">
     <option value="">Todos los técnicos</option>
@@ -204,8 +204,8 @@ const limpiarD = () => { setFiltroD({ desde: '', hasta: '' }); setDatosD([]); };
   </table>
 )}
 
-{/* Sección B */}
-<h2 className="text-xl font-bold my-4">B. Reportes por Estado</h2>
+{/* Reporte por Estado */}
+<h2 className="text-xl font-bold my-4">Reporte por estado</h2>
 <div className="flex flex-wrap gap-2 mb-2">
   <select value={filtroB.estado} onChange={e => setFiltroB({ ...filtroB, estado: e.target.value })} className="border p-2 rounded">
     <option value="">Todos los estados</option>
@@ -227,8 +227,8 @@ const limpiarD = () => { setFiltroD({ desde: '', hasta: '' }); setDatosD([]); };
   </table>
 )}
 
-{/* Sección C */}
-<h2 className="text-xl font-bold my-4">C. Carga por Técnico</h2>
+{/* Carga por técnico */}
+<h2 className="text-xl font-bold my-4">Carga por técnico</h2>
 <div className="flex flex-wrap gap-2 mb-2">
   <input type="date" value={filtroC.desde} onChange={e => setFiltroC({ ...filtroC, desde: e.target.value })} className="border p-2 rounded" />
   <input type="date" value={filtroC.hasta} onChange={e => setFiltroC({ ...filtroC, hasta: e.target.value })} className="border p-2 rounded" />
@@ -249,8 +249,8 @@ const limpiarD = () => { setFiltroD({ desde: '', hasta: '' }); setDatosD([]); };
   </table>
 )}
 
-{/* Sección D */}
-<h2 className="text-xl font-bold my-4">D. Totales por Tipo de Servicio</h2>
+{/* Totales por tipo de servicio */}
+<h2 className="text-xl font-bold my-4">Totales por tipo de servicio</h2>
 <div className="flex flex-wrap gap-2 mb-2">
   <input type="date" value={filtroD.desde} onChange={e => setFiltroD({ ...filtroD, desde: e.target.value })} className="border p-2 rounded" />
   <input type="date" value={filtroD.hasta} onChange={e => setFiltroD({ ...filtroD, hasta: e.target.value })} className="border p-2 rounded" />
