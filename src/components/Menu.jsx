@@ -20,16 +20,16 @@ export default function Menu({ perfil }) {
   ];
 
   const botonesTecnico = [
-    { label: 'CREAR REPORTE', ruta: '/crear-reporte' },
+    { label: 'CREAR REPORTE', ruta: '/tecnico/crear-reporte' },
     { label: 'VER TAREAS', ruta: '/mis-tareas' },
-    { label: 'DASHBOARD', ruta: '/tecnico' }, // Ajustado
+    { label: 'DASHBOARD', ruta: '/tecnico' }, 
   ];
 
   const botones = perfil === 'SUPERVISOR' ? botonesSupervisor : botonesTecnico;
 
   return (
     <>
-      {/* Desktop Menu */}
+      {/* escritorio Menu */}
       <div className="hidden md:flex bg-background-dark text-white w-64 h-screen flex-col items-center py-6">
         <h2 className="text-xl font-bold mb-4">F-REPORT</h2>
         <div className="mb-6">
@@ -48,7 +48,7 @@ export default function Menu({ perfil }) {
         </button>
       </div>
 
-      {/* Mobile Menu Toggle */}
+      {/* Celular Menu */}
       <div className="md:hidden fixed top-0 left-0 w-full bg-background-dark p-4 flex justify-between items-center z-50">
         <h2 className="text-white text-xl font-bold">F-REPORT</h2>
         <button onClick={() => setOpen(!open)} className="text-white text-2xl">
@@ -56,7 +56,7 @@ export default function Menu({ perfil }) {
         </button>
       </div>
 
-      {/* Mobile Menu Content */}
+      {/* Celular Menu Contenido */}
       {open && (
         <div className="md:hidden fixed top-16 left-0 w-full bg-background-dark text-white z-40 p-4">
           {botones.map((btn, idx) => (
