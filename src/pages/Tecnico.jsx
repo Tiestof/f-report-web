@@ -25,6 +25,8 @@ export default function Tecnico() {
       .then(res => res.json())
       .then(data => {
         const ahora = new Date();
+        const hoy = ahora.toISOString().split('T')[0];
+
         const filtrados = data.filter(r =>
           r.rut_usuario === rut &&
           new Date(r.fecha_reporte).getMonth() === ahora.getMonth() &&
@@ -38,7 +40,11 @@ export default function Tecnico() {
         });
         setDatosPorEstado(conteo);
 
-        const asignadasActual = filtrados.filter(r => r.id_estado_servicio === 4);
+        const asignadasActual = data.filter(r =>
+          r.rut_usuario === rut &&
+          r.id_estado_servicio === 4 &&
+          new Date(r.fecha_reporte).toISOString().split('T')[0] === hoy
+        );
         setAsignadas(asignadasActual.length);
       });
   }, [rut]);
