@@ -10,6 +10,7 @@ import VerTareasReportes from './pages/VerTareasReportes';
 import TecnicoLayout from './layouts/TecnicoLayout';
 import DashboardTecnico from './pages/Tecnico'; 
 import CrearReporte from './pages/CrearReporte';
+import VerTareas from "./pages/VerTareas";
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
         <Route path="/tecnico" element={<TecnicoLayout />}>
         <Route index element={<DashboardTecnico />} />
          <Route path="crear-reporte" element={<CrearReporte />} />
+         <Route path="ver-tareas" element={<VerTareas />} />
         </Route>
 
         {/* RUTA DEL SUPERVISOR  */}
@@ -31,7 +33,7 @@ export default function App() {
           <Route path="ver-tareas-reportes" element={<VerTareasReportes />} />
           <Route path="crear-tarea" element={<CrearTarea />} />
         </Route>
-        
+
       </Routes>
     </Router>
   );

@@ -21,7 +21,7 @@ export default function Menu({ perfil }) {
 
   const botonesTecnico = [
     { label: 'CREAR REPORTE', ruta: '/tecnico/crear-reporte' },
-    { label: 'VER TAREAS', ruta: '/mis-tareas' },
+    { label: 'VER TAREAS', ruta: '/tecnico/ver-tareas' },
     { label: 'DASHBOARD', ruta: '/tecnico' }, 
   ];
 
