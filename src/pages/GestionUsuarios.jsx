@@ -100,13 +100,23 @@ export default function GestionUsuarios() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(form)
     })
-      .then(res => res.json())
-      .then(() => {
-        setMensaje(editando ? 'Usuario actualizado' : 'Usuario creado');
-        setForm({ rut: '', nombre: '', email: '', edad: '', clave: '', id_tipo_usuario: '' });
-        setEditando(false);
-        cargarUsuarios();
-      });
+    .then(async res => {
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || 'Error en la solicitud');
+      }
+      return res.json();
+    })
+    .then(() => {
+      setMensaje(editando ? 'Usuario actualizado' : 'Usuario creado');
+      setForm({ rut: '', nombre: '', email: '', edad: '', clave: '', id_tipo_usuario: '' });
+      setEditando(false);
+      cargarUsuarios();
+    })
+    .catch(err => {
+      setMensaje(`Error: ${err.message}`);
+    });
+    
   };
 
   const editarUsuario = (usuario) => {
@@ -212,7 +222,7 @@ export default function GestionUsuarios() {
       <div className="bg-white p-6 rounded shadow">
         <h2 className="text-xl font-semibold mb-4">{editando ? 'Editar Usuario' : 'Nuevo Usuario'}</h2>
         {mensaje && <p className="text-green-600 mb-2">{mensaje}</p>}
-        <input type="text" name="rut" placeholder="RUT" value={form.rut} onChange={handleInputChange} className="mb-1 p-2 border w-full" />
+        <input type="text" name="rut" placeholder="RUT" value={form.rut} onChange={handleInputChange} className="mb-1 p-2 border w-full" disabled={editando}/>
         {errores.rut && <p className="text-red-500 mb-2">{errores.rut}</p>}
         <input type="text" name="nombre" placeholder="Nombre" value={form.nombre} onChange={handleInputChange} className="mb-1 p-2 border w-full" />
         {errores.nombre && <p className="text-red-500 mb-2">{errores.nombre}</p>}
