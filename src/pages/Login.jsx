@@ -69,7 +69,7 @@ export default function Login() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background-dark p-4">
-      <h1 className="text-8xl font-bold mb-6 text-white">F-REPORT</h1>
+      <h1 className="text-7xl font-bold mb-6 text-white">F-REPORT</h1>
       <form onSubmit={handleLogin} className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
         <label className="block mb-1 text-gray-700 font-semibold">RUT</label>
         <input
