@@ -89,7 +89,8 @@ export default function VerTareasReportes() {
   };
 
   return (
-    <div className="p-6">
+    
+    <div className="bg-white p-6 rounded shadow">
       <h2 className="text-2xl font-bold mb-4">Tareas Asignadas Hoy</h2>
       <div className="grid gap-2">
         {tareasHoy.map((t, i) => (

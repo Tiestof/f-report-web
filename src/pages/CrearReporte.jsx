@@ -183,7 +183,7 @@ export default function CrearReporte() {
   if (!isAuthenticated) return <div className="p-6 text-red-600 font-bold">Acceso no autorizado</div>;
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="bg-white p-6  mx-auto  rounded shadow">
       <h1 className="text-2xl font-bold mb-4">{modoEdicion ? 'Editar reporte' : 'Crear reporte'}</h1>
       <form onSubmit={handleSubmit} className="grid gap-4">
         <input type="date" name="fecha" value={form.fecha} min={minFechaReporte} max={hoy} onChange={handleChange} className="border p-2 rounded" required />

@@ -43,7 +43,7 @@ export default function VerTareas() {
   if (!isAuthenticated) return <div className="p-6 text-red-600 font-bold">Acceso no autorizado</div>;
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="bg-white p-6 rounded shadow">
       <h1 className="text-2xl font-bold mb-4">Tareas asignadas para hoy</h1>
       {tareas.length === 0 ? (
         <p>No tienes tareas asignadas para hoy.</p>
