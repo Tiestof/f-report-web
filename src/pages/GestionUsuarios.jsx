@@ -1,7 +1,16 @@
 import { useState, useEffect } from 'react';
 import config from '../config';
+import useAuth from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function GestionUsuarios() {
+  const isAuthenticated = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated === false) navigate('/');
+  }, [isAuthenticated]);
+
   const [usuarios, setUsuarios] = useState([]);
   const [tiposUsuario, setTiposUsuario] = useState([]);
   const [form, setForm] = useState({
@@ -16,7 +25,6 @@ export default function GestionUsuarios() {
   const [mensaje, setMensaje] = useState('');
   const [editando, setEditando] = useState(false);
   const [mensajeTabla, setMensajeTabla] = useState('');
-
   const [tablaSeleccionada, setTablaSeleccionada] = useState('');
   const [datosTabla, setDatosTabla] = useState([]);
   const [descripcion, setDescripcion] = useState('');
@@ -40,7 +48,6 @@ export default function GestionUsuarios() {
       .then(data => setTiposUsuario(data));
   };
 
-  // validacion de rut tomando como ultimo nuemro el DV.
   const validarRutCompleto = (rut) => {
     let suma = 0, multiplo = 2;
     for (let i = rut.length - 1; i >= 0; i--) {
@@ -48,7 +55,7 @@ export default function GestionUsuarios() {
       multiplo = multiplo === 7 ? 2 : multiplo + 1;
     }
     const dvEsperado = 11 - (suma % 11);
-    return dvEsperado !== 10; // solo numérico, sin guion
+    return dvEsperado !== 10;
   };
 
   const handleInputChange = (e) => {
@@ -116,7 +123,6 @@ export default function GestionUsuarios() {
     .catch(err => {
       setMensaje(`Error: ${err.message}`);
     });
-    
   };
 
   const editarUsuario = (usuario) => {
@@ -132,8 +138,6 @@ export default function GestionUsuarios() {
         cargarUsuarios();
       });
   };
-
-  // --- GESTIÓN DE TABLAS ---
 
   const cargarTabla = (tabla) => {
     fetch(`${config.apiUrl}/${tabla}`)
@@ -176,9 +180,13 @@ export default function GestionUsuarios() {
         setEditandoTabla(false);
         setIdEditar(null);
         setMensajeTabla(editandoTabla ? 'Elemento actualizado correctamente' : 'Elemento creado correctamente');
-        setTimeout(() => setMensajeTabla(''), 3000); // Limpiamos el mensaje después de 3 seg
+        setTimeout(() => setMensajeTabla(''), 3000);
       });
   };
+
+  if (isAuthenticated === null) {
+    return <div className="p-6">Verificando autenticación...</div>;
+  }
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">

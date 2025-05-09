@@ -1,7 +1,16 @@
 import { useEffect, useState } from 'react';
 import config from '../config';
+import useAuth from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function CrearTarea() {
+  const isAuthenticated = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated === false) navigate('/');
+  }, [isAuthenticated]);
+
   const [usuarios, setUsuarios] = useState([]);
   const [clientes, setClientes] = useState([]);
   const [form, setForm] = useState({
@@ -16,18 +25,18 @@ export default function CrearTarea() {
 
   useEffect(() => {
     fetch(`${config.apiUrl}/usuarios`)
-    .then(res => res.json())
-    .then(data => {
-      const tecnicos = data.filter(u => u.id_tipo_usuario === 1);
-      setUsuarios(tecnicos);
-    });
+      .then(res => res.json())
+      .then(data => {
+        const tecnicos = data.filter(u => u.id_tipo_usuario === 1);
+        setUsuarios(tecnicos);
+      });
 
-  fetch(`${config.apiUrl}/clientes`)
-    .then(res => res.json())
-    .then(data => setClientes(data));
+    fetch(`${config.apiUrl}/clientes`)
+      .then(res => res.json())
+      .then(data => setClientes(data));
 
-  cargarTareasAsignadas();
-}, []);
+    cargarTareasAsignadas();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,16 +64,13 @@ export default function CrearTarea() {
     return horas;
   };
 
-  
-
   const guardar = () => {
-    // Validar campos obligatorios
     if (!form.rut_usuario || !form.fecha_reporte || !form.hora_inicio || !form.id_cliente || !form.direccion) {
       setMensaje('Todos los campos son obligatorios');
       setTimeout(() => setMensaje(''), 3000);
       return;
     }
-  
+
     const body = {
       rut_usuario: form.rut_usuario,
       fecha_reporte: form.fecha_reporte,
@@ -78,7 +84,7 @@ export default function CrearTarea() {
       id_tipo_hardware: null,
       id_sistema_operativo: null
     };
-  
+
     fetch(`${config.apiUrl}/reportes`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -99,41 +105,43 @@ export default function CrearTarea() {
       });
   };
 
+  if (isAuthenticated === null) {
+    return <div className="p-6">Verificando autenticación...</div>;
+  }
+
   return (
     <div className="bg-white p-6 rounded shadow">
       <h2 className="text-2xl font-bold mb-4">Crear Tarea</h2>
-  
+
       {mensaje && <p className="text-green-600 mb-4">{mensaje}</p>}
-  
-      {/* Formulario */}
+
       <select name="rut_usuario" value={form.rut_usuario} onChange={handleChange} className="mb-2 p-2 border w-full">
         <option value="">Selecciona Técnico</option>
         {usuarios.map((u, idx) => (
           <option key={idx} value={u.rut}>{u.nombre}</option>
         ))}
       </select>
-  
+
       <input type="date" name="fecha_reporte" value={form.fecha_reporte} onChange={handleChange} className="mb-2 p-2 border w-full" />
-  
+
       <select name="hora_inicio" value={form.hora_inicio} onChange={handleChange} className="mb-2 p-2 border w-full">
         <option value="">Selecciona Hora de Inicio</option>
         {generarHoras().map((h, i) => (
           <option key={i} value={h}>{h}</option>
         ))}
       </select>
-  
+
       <select name="id_cliente" value={form.id_cliente} onChange={handleChange} className="mb-2 p-2 border w-full">
         <option value="">Selecciona Cliente</option>
         {clientes.map((c, idx) => (
           <option key={idx} value={c.id_cliente}>{c.nombre_cliente}</option>
         ))}
       </select>
-  
+
       <input type="text" name="direccion" placeholder="Dirección" maxLength="250" value={form.direccion} onChange={handleChange} className="mb-2 p-2 border w-full" />
-  
+
       <button onClick={guardar} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Guardar</button>
-  
-      {/* Lista de tareas asignadas */}
+
       {tareasAsignadas.length > 0 && (
         <div className="mt-10">
           <h3 className="text-xl font-bold mb-4">Tareas Asignadas del Mes</h3>

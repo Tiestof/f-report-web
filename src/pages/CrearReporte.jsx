@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import config from '../config';
 import useAuth from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function CrearReporte() {
   const isAuthenticated = useAuth();
+  const navigate = useNavigate();
   const rut = localStorage.getItem('usuarioRut');
   const [clientes, setClientes] = useState([]);
   const [tiposServicio, setTiposServicio] = useState([]);
@@ -20,6 +22,10 @@ export default function CrearReporte() {
   });
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+
+  useEffect(() => {
+    if (isAuthenticated === false) navigate('/');
+  }, [isAuthenticated]);
 
   const hoy = new Date().toISOString().split('T')[0];
   const hace15Dias = new Date();
@@ -180,7 +186,7 @@ export default function CrearReporte() {
   };
 
   if (isAuthenticated === null) return <div className="p-6">Verificando autenticación...</div>;
-  if (!isAuthenticated) return <div className="p-6 text-red-600 font-bold">Acceso no autorizado</div>;
+
 
   return (
     <div className="bg-white p-6  mx-auto  rounded shadow">

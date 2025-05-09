@@ -1,7 +1,16 @@
 import { useState, useEffect } from 'react';
 import config from '../config';
+import useAuth from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function Informes() {
+  const isAuthenticated = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated === false) navigate('/');
+  }, [isAuthenticated]);
+
   const [tecnicos, setTecnicos] = useState([]);
   const [tiposServicio, setTiposServicio] = useState([]);
   const [estados, setEstados] = useState([]);
@@ -176,6 +185,10 @@ const limpiarD = () => { setFiltroD({ desde: '', hasta: '' }); setDatosD([]); };
     document.body.removeChild(enlace);
   };
 
+  if (isAuthenticated === null) {
+    return <div className="p-6">Verificando autenticación...</div>;
+  }
+  
   return (
     <div className="p-6 bg-white">
       <h1 className="text-2xl font-bold mb-4">Informes</h1>

@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import config from '../config';
+import useAuth from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function VerTareasReportes() {
+  const isAuthenticated = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated === false) navigate('/');
+  }, [isAuthenticated]);
+
   const [tareasHoy, setTareasHoy] = useState([]);
   const [reportes, setReportes] = useState([]);
   const [tecnicos, setTecnicos] = useState([]);
@@ -66,13 +75,14 @@ export default function VerTareasReportes() {
     fetch(`${config.apiUrl}/estados-servicio`)
       .then(res => res.json())
       .then(setEstados);
+
     obtenerTareasHoy();
 
     const hoy = new Date();
     const primerDia = new Date(hoy);
-    primerDia.setDate(hoy.getDate() - hoy.getDay()); // Lunes
+    primerDia.setDate(hoy.getDate() - hoy.getDay());
     const ultimoDia = new Date(primerDia);
-    ultimoDia.setDate(primerDia.getDate() + 4); // Viernes
+    ultimoDia.setDate(primerDia.getDate() + 4);
 
     const desde = primerDia.toISOString().split('T')[0];
     const hasta = ultimoDia.toISOString().split('T')[0];
@@ -88,8 +98,11 @@ export default function VerTareasReportes() {
     3: 'bg-amber-400'
   };
 
+  if (isAuthenticated === null) {
+    return <div className="p-6">Verificando autenticación...</div>;
+  }
+
   return (
-    
     <div className="bg-white p-6 rounded shadow">
       <h2 className="text-2xl font-bold mb-4">Tareas Asignadas Hoy</h2>
       <div className="grid gap-2">
@@ -108,6 +121,7 @@ export default function VerTareasReportes() {
         <p className="text-sm"><span className="inline-block w-4 h-4 bg-green-200 mr-2 rounded"></span> FINALIZADO</p>
         <p className="text-sm"><span className="inline-block w-4 h-4 bg-amber-400 mr-2 rounded"></span> CANCELADO</p>
       </div>
+
       <div className="flex gap-2 mb-4">
         <input type="date" value={filtro.desde} onChange={(e) => setFiltro({ ...filtro, desde: e.target.value })} className="border p-2 rounded" />
         <input type="date" value={filtro.hasta} onChange={(e) => setFiltro({ ...filtro, hasta: e.target.value })} className="border p-2 rounded" />

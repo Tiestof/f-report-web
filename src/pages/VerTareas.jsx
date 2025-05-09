@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react';
 import config from '../config';
 import useAuth from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function VerTareas() {
   const isAuthenticated = useAuth();
+  const navigate = useNavigate();
   const rut = localStorage.getItem('usuarioRut');
-  const nombre = localStorage.getItem('usuarioNombre'); // ✅ Obtener nombre del técnico
+  const nombre = localStorage.getItem('usuarioNombre');
   const [tareas, setTareas] = useState([]);
+
+  useEffect(() => {
+    if (isAuthenticated === false) navigate('/');
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const cargarTareas = async () => {
@@ -41,8 +47,9 @@ export default function VerTareas() {
     cargarTareas();
   }, [rut]);
 
-  if (isAuthenticated === null) return <div className="p-6">Verificando autenticación...</div>;
-  if (!isAuthenticated) return <div className="p-6 text-red-600 font-bold">Acceso no autorizado</div>;
+  if (isAuthenticated === null) {
+    return <div className="p-6">Verificando autenticación...</div>;
+  }
 
   return (
     <div className="bg-white p-6 rounded shadow">

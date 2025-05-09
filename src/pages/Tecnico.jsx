@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import useAuth from '../hooks/useAuth';
 import config from '../config';
+import { useNavigate } from 'react-router-dom';
 import { Bar } from 'react-chartjs-2';
 import { Chart as ChartJS, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } from 'chart.js';
 
@@ -8,11 +9,16 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend)
 
 export default function Tecnico() {
   const isAuthenticated = useAuth();
+  const navigate = useNavigate();
   const [datosPorEstado, setDatosPorEstado] = useState({});
   const [asignadas, setAsignadas] = useState(0);
   const [estados, setEstados] = useState([]);
   const rut = localStorage.getItem('usuarioRut');
   const nombre = localStorage.getItem('usuarioNombre');
+
+  useEffect(() => {
+    if (isAuthenticated === false) navigate('/');
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (!rut) return;
@@ -25,7 +31,7 @@ export default function Tecnico() {
       .then(res => res.json())
       .then(data => {
         const ahora = new Date();
-        const hoy = ahora.toISOString().split('T')[0];
+        const hoyLocalSinHora = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
 
         const filtrados = data.filter(r =>
           r.rut_usuario === rut &&
@@ -40,9 +46,6 @@ export default function Tecnico() {
         });
         setDatosPorEstado(conteo);
 
-        const hoyLocal = new Date();
-        const hoyLocalSinHora = new Date(hoyLocal.getFullYear(), hoyLocal.getMonth(), hoyLocal.getDate());
-        
         const asignadasActual = data.filter(r => {
           const fecha = new Date(r.fecha_reporte);
           const fechaLocal = new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate());
@@ -50,16 +53,13 @@ export default function Tecnico() {
                  r.id_estado_servicio === 4 &&
                  fechaLocal.getTime() === hoyLocalSinHora.getTime();
         });
-        
+
         setAsignadas(asignadasActual.length);
       });
   }, [rut]);
 
   if (isAuthenticated === null) {
     return <div className="p-6">Verificando autenticación...</div>;
-  }
-  if (!isAuthenticated) {
-    return <div className="p-6 text-red-600 font-bold">Acceso no autorizado</div>;
   }
 
   const chartData = {
