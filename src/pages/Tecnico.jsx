@@ -40,11 +40,17 @@ export default function Tecnico() {
         });
         setDatosPorEstado(conteo);
 
-        const asignadasActual = data.filter(r =>
-          r.rut_usuario === rut &&
-          r.id_estado_servicio === 4 &&
-          new Date(r.fecha_reporte).toISOString().split('T')[0] === hoy
-        );
+        const hoyLocal = new Date();
+        const hoyLocalSinHora = new Date(hoyLocal.getFullYear(), hoyLocal.getMonth(), hoyLocal.getDate());
+        
+        const asignadasActual = data.filter(r => {
+          const fecha = new Date(r.fecha_reporte);
+          const fechaLocal = new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate());
+          return String(r.rut_usuario) === rut &&
+                 r.id_estado_servicio === 4 &&
+                 fechaLocal.getTime() === hoyLocalSinHora.getTime();
+        });
+        
         setAsignadas(asignadasActual.length);
       });
   }, [rut]);

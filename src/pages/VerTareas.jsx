@@ -5,6 +5,7 @@ import useAuth from '../hooks/useAuth';
 export default function VerTareas() {
   const isAuthenticated = useAuth();
   const rut = localStorage.getItem('usuarioRut');
+  const nombre = localStorage.getItem('usuarioNombre'); // ✅ Obtener nombre del técnico
   const [tareas, setTareas] = useState([]);
 
   useEffect(() => {
@@ -45,7 +46,9 @@ export default function VerTareas() {
 
   return (
     <div className="bg-white p-6 rounded shadow">
-      <h1 className="text-2xl font-bold mb-4">Tareas asignadas para hoy</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        {nombre || 'Técnico'}, Tareas asignadas para hoy
+      </h1>
       {tareas.length === 0 ? (
         <p>No tienes tareas asignadas para hoy.</p>
       ) : (
