@@ -201,7 +201,7 @@ export default function GestionUsuarios() {
               <th className="py-2 px-4 border-b">RUT</th>
               <th className="py-2 px-4 border-b">Nombre</th>
               <th className="py-2 px-4 border-b">Email</th>
-              <th className="py-2 px-4 border-b">Edad</th>
+              <th className="py-2 px-4 border-b">Nivel</th>
               <th className="py-2 px-4 border-b">Tipo</th>
               <th className="py-2 px-4 border-b">Acciones</th>
             </tr>
@@ -236,7 +236,7 @@ export default function GestionUsuarios() {
         {errores.nombre && <p className="text-red-500 mb-2">{errores.nombre}</p>}
         <input type="email" name="email" placeholder="Email" value={form.email} onChange={handleInputChange} className="mb-1 p-2 border w-full" />
         {errores.email && <p className="text-red-500 mb-2">{errores.email}</p>}
-        <input type="number" name="edad" placeholder="Edad" value={form.edad} onChange={handleInputChange} className="mb-1 p-2 border w-full" />
+        <input type="number" name="edad" placeholder="Nivel" value={form.edad} onChange={handleInputChange} className="mb-1 p-2 border w-full" />
         {errores.edad && <p className="text-red-500 mb-2">{errores.edad}</p>}
         <input type="password" name="clave" placeholder="Clave" value={form.clave} onChange={handleInputChange} className="mb-1 p-2 border w-full" />
         {errores.clave && <p className="text-red-500 mb-2">{errores.clave}</p>}
