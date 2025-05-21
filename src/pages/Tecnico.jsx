@@ -79,14 +79,14 @@ export default function Tecnico() {
 
   return (
     <div className="flex-1 p-6 bg-gray-100">
-      <h1 className="text-2xl font-bold mb-6">Bienvenido, {nombre}</h1>
+      <h1 className="text-2x2 font-bold mb-5">Bienvenido, {nombre}</h1>
 
       <div className="mb-6 bg-white p-4 rounded shadow">
         <h2 className="text-xl font-bold text-purple-700 mb-2">Tareas Asignadas para hoy</h2>
         <p className="text-4xl font-bold text-center text-purple-900">{asignadas}</p>
       </div>
 
-      <div className="bg-white p-4 rounded shadow max-w-xl">
+      <div className="bg-white p-4 rounded shadow w-full max-w-full overflow-x-auto">
         <Bar
           data={chartData}
           options={{
