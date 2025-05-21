@@ -258,7 +258,7 @@ export default function CrearReporte() {
             return (
               <li key={r.id_reporte} className={`border p-4 rounded shadow flex flex-col md:flex-row justify-between items-start md:items-center ${colorClase}`}>
                 <div>
-                  <p className="font-semibold">{r.fecha_reporte} - {r.direccion}</p>
+                  <p className="font-semibold">{r.fecha_reporte.split('T')[0]} - {clientes.find(c => c.id_cliente === r.id_cliente)?.nombre_cliente || 'Cliente desconocido'} - {r.direccion}</p>
                   <p className="text-sm">{r.comentario}</p>
                   <p className="text-xs mt-1 font-medium">Estado: {textoEstado}</p>
                 </div>
