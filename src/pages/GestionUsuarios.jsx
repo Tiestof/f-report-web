@@ -193,9 +193,9 @@ export default function GestionUsuarios() {
       <h1 className="text-3xl font-bold text-gray-700 mb-6">Gestión de Usuarios</h1>
 
       {/* Listamos los Usuarios */}
-      <div className="mb-8">
+      <div className="mb-8 overflow-x-auto">
         <h2 className="text-xl font-semibold mb-4">Lista de Usuarios</h2>
-        <table className="min-w-full bg-white">
+        <table className="min-w-[640px] bg-white w-full">
           <thead>
             <tr>
               <th className="py-2 px-4 border-b">RUT</th>

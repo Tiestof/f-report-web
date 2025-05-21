@@ -63,7 +63,8 @@ export default function VerTareasReportes() {
           );
         });
 
-        setReportes(filtrados);
+        const ordenados = filtrados.sort((a, b) => a.id_estado_servicio - b.id_estado_servicio);
+        setReportes(ordenados);
       });
   };
 
@@ -93,9 +94,9 @@ export default function VerTareasReportes() {
   }, []);
 
   const colores = {
-    1: 'bg-yellow-200',
-    2: 'bg-green-200',
-    3: 'bg-amber-400'
+    1: 'bg-yellow-200', // PENDIENTE
+    2: 'bg-green-200',  // FINALIZADO
+    3: 'bg-amber-600'   // CANCELADO (más café)
   };
 
   if (isAuthenticated === null) {
@@ -104,7 +105,7 @@ export default function VerTareasReportes() {
 
   return (
     <div className="bg-white p-6 rounded shadow">
-      <h2 className="text-2xl font-bold mb-4">Tareas Asignadas Hoy</h2>
+      <h2 className="text-2xl font-bold mb-4">Tareas Asignadas por fecha</h2>
       <div className="grid gap-2">
         {tareasHoy.map((t, i) => (
           <div key={i} className="border p-3 rounded shadow bg-white">
@@ -122,10 +123,12 @@ export default function VerTareasReportes() {
         <p className="text-sm"><span className="inline-block w-4 h-4 bg-amber-400 mr-2 rounded"></span> CANCELADO</p>
       </div>
 
-      <div className="flex gap-2 mb-4">
-        <input type="date" value={filtro.desde} onChange={(e) => setFiltro({ ...filtro, desde: e.target.value })} className="border p-2 rounded" />
-        <input type="date" value={filtro.hasta} onChange={(e) => setFiltro({ ...filtro, hasta: e.target.value })} className="border p-2 rounded" />
-        <button onClick={obtenerReportes} className="bg-blue-600 text-white px-4 py-2 rounded">Filtrar</button>
+      <div className="flex flex-col md:flex-row gap-2 mb-4">
+        <div className="flex flex-col md:flex-row gap-2 w-full">
+          <input type="date" value={filtro.desde} onChange={(e) => setFiltro({ ...filtro, desde: e.target.value })} className="border p-2 rounded w-full md:w-auto" />
+          <input type="date" value={filtro.hasta} onChange={(e) => setFiltro({ ...filtro, hasta: e.target.value })} className="border p-2 rounded w-full md:w-auto" />
+        </div>
+        <button onClick={obtenerReportes} className="bg-blue-600 text-white px-4 py-2 rounded w-full md:w-auto">Filtrar</button>
       </div>
 
       <div className="grid gap-2">

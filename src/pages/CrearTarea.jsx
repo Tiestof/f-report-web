@@ -145,28 +145,30 @@ export default function CrearTarea() {
       {tareasAsignadas.length > 0 && (
         <div className="mt-10">
           <h3 className="text-xl font-bold mb-4">Tareas Asignadas del Mes</h3>
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr>
-                <th className="py-2 px-4 border-b">Técnico</th>
-                <th className="py-2 px-4 border-b">Fecha</th>
-                <th className="py-2 px-4 border-b">Hora Inicio</th>
-                <th className="py-2 px-4 border-b">Cliente</th>
-                <th className="py-2 px-4 border-b">Dirección</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tareasAsignadas.map((t, idx) => (
-                <tr key={idx}>
-                  <td className="py-2 px-4 border-b">{t.rut_usuario}</td>
-                  <td className="py-2 px-4 border-b">{t.fecha_reporte}</td>
-                  <td className="py-2 px-4 border-b">{t.hora_inicio}</td>
-                  <td className="py-2 px-4 border-b">{clientes.find(c => c.id_cliente === t.id_cliente)?.nombre_cliente || '—'}</td>
-                  <td className="py-2 px-4 border-b">{t.direccion}</td>
+          <div className="overflow-x-auto">
+            <table className="min-w-[640px] bg-white w-full">
+              <thead>
+                <tr>
+                  <th className="py-2 px-4 border-b">Técnico</th>
+                  <th className="py-2 px-4 border-b">Fecha</th>
+                  <th className="py-2 px-4 border-b">Hora Inicio</th>
+                  <th className="py-2 px-4 border-b">Cliente</th>
+                  <th className="py-2 px-4 border-b">Dirección</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {tareasAsignadas.map((t, idx) => (
+                  <tr key={idx}>
+                    <td className="py-2 px-4 border-b">{t.rut_usuario}</td>
+                    <td className="py-2 px-4 border-b">{t.fecha_reporte}</td>
+                    <td className="py-2 px-4 border-b">{t.hora_inicio}</td>
+                    <td className="py-2 px-4 border-b">{clientes.find(c => c.id_cliente === t.id_cliente)?.nombre_cliente || '—'}</td>
+                    <td className="py-2 px-4 border-b">{t.direccion}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>
