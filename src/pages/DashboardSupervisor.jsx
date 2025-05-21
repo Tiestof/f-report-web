@@ -9,17 +9,9 @@ export default function DashboardSupervisor() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated === false) navigate('/');
-  }, [isAuthenticated]);
+  if (isAuthenticated === false) return navigate('/');
 
-  const [reportesNoFinalizados, setReportesNoFinalizados] = useState(0);
-  const [serviciosDelMes, setServiciosDelMes] = useState(0);
-  const [serviciosPorEstado, setServiciosPorEstado] = useState([]);
-  const [cargaTecnicos, setCargaTecnicos] = useState([]);
-  const [tecnicos, setTecnicos] = useState([]);
-  const [actividadesHoy, setActividadesHoy] = useState([]);
-
-  useEffect(() => {
+  const actualizarDatos = () => {
     fetch(`${config.apiUrl}/estadisticas/reportes-no-finalizados-hoy`)
       .then(res => res.json())
       .then(data => setReportesNoFinalizados(data[0]?.total || 0));
@@ -28,47 +20,49 @@ export default function DashboardSupervisor() {
       .then(res => res.json())
       .then(data => setServiciosDelMes(data[0]?.total || 0));
 
-  fetch(`${config.apiUrl}/estadisticas/servicios-por-estado`)
-    .then(res => res.json())
-    .then(data => {
-      const filtrado = data.filter(item => item.id_estado !== 5);
-      setServiciosPorEstado(filtrado);
-    });
+    fetch(`${config.apiUrl}/estadisticas/servicios-por-estado`)
+      .then(res => res.json())
+      .then(data => {
+        const filtrado = data.filter(item => item.id_estado !== 5);
+        setServiciosPorEstado(filtrado);
+      });
 
-fetch(`${config.apiUrl}/estadisticas/carga-tecnicos`)
-  .then(res => res.json())
-  .then(data => {
-    const fechasMap = {};
-    const tecnicosSet = new Set();
+    fetch(`${config.apiUrl}/estadisticas/carga-tecnicos`)
+      .then(res => res.json())
+      .then(data => {
+        const fechasMap = {};
+        const tecnicosSet = new Set();
 
-    data.forEach(item => {
-      tecnicosSet.add(item.nombre);
-      if (!fechasMap[item.fecha]) fechasMap[item.fecha] = { fecha: item.fecha };
-      fechasMap[item.fecha][item.nombre] = item.total_servicios;
-    });
+        data.forEach(item => {
+          tecnicosSet.add(item.nombre);
+          if (!fechasMap[item.fecha]) fechasMap[item.fecha] = { fecha: item.fecha };
+          fechasMap[item.fecha][item.nombre] = item.total_servicios;
+        });
 
-    let carga = Object.values(fechasMap);
+        let carga = Object.values(fechasMap);
+        carga.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
 
-    // Ordenar de fecha más reciente a mas antigua
-    carga.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+        const hoy = new Date();
+        carga = carga.filter(item => {
+          const fecha = new Date(item.fecha);
+          const diff = (hoy - fecha) / (1000 * 60 * 60 * 24);
+          return diff <= 30;
+        });
 
-    // Filtrar últimos 30 días
-    const hoy = new Date();
-    carga = carga.filter(item => {
-      const fecha = new Date(item.fecha);
-      const diff = (hoy - fecha) / (1000 * 60 * 60 * 24);
-      return diff <= 30;
-    });
+        setCargaTecnicos(carga);
+        setTecnicos(Array.from(tecnicosSet));
+      });
 
-    setCargaTecnicos(carga);
-    setTecnicos(Array.from(tecnicosSet));
-  });
+    fetch(`${config.apiUrl}/estadisticas/actividades-hoy`)
+      .then(res => res.json())
+      .then(data => setActividadesHoy(data));
+  };
 
-  fetch(`${config.apiUrl}/estadisticas/actividades-hoy`)
-  .then(res => res.json())
-  .then(data => setActividadesHoy(data));
+  actualizarDatos();
+  const intervalo = setInterval(actualizarDatos, 30000);
 
-  }, []);
+  return () => clearInterval(intervalo);
+}, [isAuthenticated]);
 
   if (isAuthenticated === null) return <div className="p-6">Verificando autenticación...</div>;
 
